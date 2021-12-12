@@ -1,4 +1,5 @@
 # BLIND Web
+블라인드 웹 클론 프로젝트.
 
 # Server
 express PORT : 3000
