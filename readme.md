@@ -4,7 +4,7 @@
 express PORT : 3000
 
 # Client
-Vue
+Nuxt
 
 # DB
 Mongoose
