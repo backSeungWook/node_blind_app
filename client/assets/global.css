@@ -8,3 +8,16 @@
   display: grid;
   place-content:center;
 }
+
+.modal-outside .head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.close-btn > img{
+
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}

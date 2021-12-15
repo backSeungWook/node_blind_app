@@ -7,15 +7,17 @@ const { User } = require('../mongoose/model')
 router.post('/user/login',async (req,res) =>{
   const {email,password} = req.body
 
-  const loginUser = await User.find({email})
-  if(!loginUser._id){
+  const loginUser = await User.findOne({email:email})
+  console.log(loginUser)
+  if(!loginUser){
     return res.send({
       error:true,
       msg:'존재하지 않는 이메일'
     })
   }
-  
+  console.log('password : ',password)
   const correctPassword =  await loginUser.authenticate(password)
+  
   if(!correctPassword){
     return res.send({
       error:true,

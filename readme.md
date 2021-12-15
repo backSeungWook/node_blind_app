@@ -14,3 +14,11 @@ https://www.npmjs.com/package/mongoose-sequence
 ```
 npm i --save mongoose-sequence
 ```
+
+확장 프로그램
+ 테마 - Plastic
+ 편의성 -
+    TabOut
+    Bracket Pair Colorizer 2
+    Material Icon Theme
+    Auto Close Tag
