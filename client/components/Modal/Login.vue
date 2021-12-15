@@ -59,9 +59,16 @@ export default {
   },
   methods:{
     async loginWithEmail(){
-      const { data} = await this.$axios.$post(`http://localhost:4000/user/login`,{email:this.email,password:this.password})
-      console.log(data)
+      const data = await this.$axios.$post(`http://localhost:4000/user/login`,{email:this.email,password:this.password})
+      
+      if(data.error){
+        return
+      }
+      this.$store.commit('user/SET_USER',data)
+
+      this.$store.commit('modal/SET_LOGIN_MODAL_CLOSE')
     },
+    
     timeModifier(){
       this.leftTime -= 1
       if(this.leftTime <= 0){

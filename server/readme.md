@@ -12,3 +12,10 @@ app.use(comment) // 게시글 안에 있는 댓글
 app.use(user) // 사용자 정보
 app.use(reply) // 게시글 안에 있는 댓글의 대댓글
 ```
+
+# 21.12.15(수)
+## index.js
+```js
+// JWT 시크릿 설정(리퀘스트로 보낼수 있음)
+app.set('jwt-secret',SECRET)
+```

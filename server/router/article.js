@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const jwt = require('jsonwebtoken')
 
 const { Article , Comment } = require('../mongoose/model')
 
@@ -13,9 +14,29 @@ router.get('/article/:id',async (req,res) =>{
 
 // 게시글 추가
 router.post('/article/create', async (req,res) =>{
-  const { author, title, content, board } = req.body
-  const newArticle = await Article({author,title,content,board}).save()
-  res.send(newArticle)
+  const { title, content, board } = req.body
+  const { authorization } = req.headers
+
+  if(authorization){
+    return res.send({
+      error:true,
+      msg:'토큰이 존재 하지 않음.',
+    })    
+  }
+  
+  const token = authorization.split(" ")[1]
+  const secret = req.app.get('jwt-secret')
+  
+  jwt.verify(token,secret,async (err,data) =>{
+    if(err){
+      res.send(err)
+    }
+    
+    const payload = {author,title,content,board}
+    const newArticle = await Article(payload).save()
+    res.send(newArticle)
+
+  })  
 })
 
 //게시글 수정
