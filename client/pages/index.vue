@@ -7,7 +7,7 @@
         <board-card 
           v-for ="b in mainContent" 
           :key="b.slug" 
-          :title="b.title" 
+          :title="b.title"
           :slug="b.slug" 
           :articleList="b.content"
         /> 
