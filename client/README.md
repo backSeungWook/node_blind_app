@@ -21,7 +21,7 @@ export default function ({$axios}, inject){
   if(process.browser){
     const token = localStorage.getItem('token')
  
-
+    //헤더로 통신하기 위한 API
     const api = $axios.create({
       headers:{
         Authorization:`Beare ${token}`
@@ -40,5 +40,6 @@ plugins: [
 ],
 ...
 ```
-       
 
+## icon
+https://vue-feather-icons.egoist.sh/

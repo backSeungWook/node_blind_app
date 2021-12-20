@@ -1,28 +1,44 @@
 <template>
   <div class="board-card">
     <div class="head">
-      <div class="board-icon">
+      <div class="title-side">
+        <div class="board-icon"></div>
         <h2>{{title}}</h2>
-        <nuxt-link 
-          :to="{
-            name:'topics',
-            params:{
-              id:slug
-            }
-          }"
-        >
-        더보기 >
-        </nuxt-link>
       </div>
+      <nuxt-link 
+        :to="{
+          name:'topics',
+          params:{
+            id:slug
+          }
+        }"
+      >
+      더보기 >
+      </nuxt-link>
     </div>
 
     <div class="body">
+      <ul class="article-list">
+        <li v-for="a in articleList" :key="a.id">
+          <span class="article-title">{{a.title}}</span> 
+          <div class="count-display">
+            <div class="count-item">
+              <EyeIcon size="1x" class="icon"/>
+              {{a.viewCount}}
+            </div>
+          </div>
+        </li>
+      </ul>
+
       
     </div>
+
+    
   </div>
 </template>
 
 <script>
+import { EyeIcon   } from 'vue-feather-icons'
 export default {
   props:{
     title:{
@@ -37,10 +53,14 @@ export default {
       type:Array,
       default:[]
     }
+  },
+  components:{
+    EyeIcon
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+
 
 </style>
