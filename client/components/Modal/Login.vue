@@ -61,6 +61,7 @@ export default {
     async loginWithEmail(){
       const data = await this.$axios.$post(`http://localhost:4000/user/login`,{email:this.email,password:this.password})
       
+      
       if(data.error){
         return
       }
@@ -91,16 +92,7 @@ export default {
 #login-modal{
   background: white;
   width:520px;
-  .head{
-    color:rgb(34,34,34);
-    font-size:18px;
-    font-weight:700;
-    padding:23px 30px;
-    border-bottom: solid 1px rgb(223, 225, 228);
-    h5{
-      margin:0;
-    }
-  }
+  
   .body{
     font-size:16px;
     padding:0 30px;

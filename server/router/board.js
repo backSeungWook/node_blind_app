@@ -64,9 +64,23 @@ router.get('/board/:slug',async (req,res) =>{
       msg:'존재하지 않는 게시판'
     })
   }
-  const article = await Article.find( {board:board._id})
+  const article = await Article.find( {board:board._id}).populate({
+    path:'author',
+    populate:{path:'company'}
+  })  //.populate("author") => 외래키 참조(즉 조인) 
 
-  res.send({article,error:false,msg:'성공'})
+  // map 함수 시 ._doc
+  const fromatedArtilce = article.map( v =>{
+    return{
+      ...v._doc,
+      author:{
+        ...v._doc.author._doc,
+        nickname: `${v._doc.author.nickname[0]}${"*".repeat(v._doc.author._doc.nickname.length -1)}`
+      }
+    }
+  })
+
+  res.send({article:fromatedArtilce,error:false,msg:'성공'})
 })
 
 //관리자: 게시판 추가

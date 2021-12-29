@@ -5,11 +5,22 @@ const jwt = require('jsonwebtoken')
 const { Article , Comment } = require('../mongoose/model')
 
 // 개별 게시글 가져오는 라우트
-router.get('/article/:id',async (req,res) =>{
-  const {id} = req.params
-  const article = await Article.findById(id)
-  const comment = await Comment.find({article:id})
-  res.send({article,comment})
+router.get('/article/:key',async (req,res) =>{
+  const {key} = req.params
+  const article = await Article.findOne({key:key})
+    .populate({
+      path:'author',
+      populate:{path:'company'}
+    })
+    .populate('board')
+  const comment = await Comment.find({article:article._id})
+  res.send({article:{
+    ...article._doc,
+    author:{
+      ...article.author._doc,
+      nickname: `${article.author._doc.nickname[0]}${"*".repeat(article.author._doc.nickname.length -1)}`
+    }
+  },comment})
 })
 
 // 게시글 추가
@@ -17,7 +28,7 @@ router.post('/article/create', async (req,res) =>{
   const { title, content, board } = req.body
   const { authorization } = req.headers
 
-  if(authorization){
+  if(!authorization){
     return res.send({
       error:true,
       msg:'토큰이 존재 하지 않음.',
@@ -32,7 +43,8 @@ router.post('/article/create', async (req,res) =>{
       res.send(err)
     }
     
-    const payload = {author,title,content,board}
+    console.log(data)
+    const payload = {author:data.id,title,content,board}
     const newArticle = await Article(payload).save()
     res.send(newArticle)
 

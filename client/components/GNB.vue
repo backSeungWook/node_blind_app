@@ -25,7 +25,7 @@
     </div>
 
     <login-modal />
-    <!-- <writing-modal /> -->
+    <writing-modal />
   </nav>
   </div>
 </template>
@@ -50,6 +50,7 @@ export default {
       if(!this.user.email){
         this.$store.commit('modal/SET_LOGIN_MODAL_OPEN')
       }
+      this.$store.commit('modal/SET_WRITING_MODAL_STATE',true)
     },
     clickLoginButton(){
       if(!this.user.email){

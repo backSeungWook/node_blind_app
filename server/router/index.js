@@ -6,6 +6,7 @@ const board = require('./board')
 const company = require('./company')
 const comment = require('./comment')
 const reply = require('./reply')
+const search = require('./search')
 
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
   company,
   board,
   comment,
-  reply
+  reply,
+  search
 }
 

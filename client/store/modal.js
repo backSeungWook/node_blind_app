@@ -4,7 +4,8 @@ export const state = () => ({
   login:{
     show:false,
     directLogin:false,
-  }
+  },
+  writing:false
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
       directLogin:false
     }
   },
+  SET_WRITING_MODAL_STATE(state,display){
+    state.writing = display
+  }
 }
 
 export const actions = {}

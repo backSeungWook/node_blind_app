@@ -7,7 +7,7 @@
       </div>
       <nuxt-link 
         :to="{
-          name:'topics',
+          name:'topics-id',
           params:{
             id:slug
           }

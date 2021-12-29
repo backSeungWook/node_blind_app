@@ -11,22 +11,18 @@
           :slug="b.slug" 
           :articleList="b.content"
         /> 
-          <board-card 
-          v-for ="b in mainContent" 
-          :key="b.slug" 
-          :title="b.title" 
-          :slug="b.slug" 
-          :articleList="b.content"
-        /> 
+       
       </div>
     </main>
+    <realtime-famous-company />
   </div>
 </template>
 
 <script>
 import BoardCard from '../components/Main/BoardCard.vue'
 import BestBoardCard from '@/components/Main/BestBoardCard'
-import Searchbar from '../components/Searchbar.vue'
+// import Searchbar from '../components/Searchbar.vue'
+import RealtimeFamousCompany from '@/components/Main/RealtimeFamousCompany'
 
 
 export default {
@@ -37,8 +33,10 @@ export default {
   },
   components: { 
     BoardCard, 
-    Searchbar ,
-    BestBoardCard
+    //Searchbar ,
+    BestBoardCard,
+    RealtimeFamousCompany,
+  
   },
   created(){
     this.getRecentBoardArticleList()
@@ -52,8 +50,8 @@ export default {
           return
         }
   
-        this.mainContent = data.content
-        console.log(this.mainContent[0].content)
+        this.mainContent = data.content.sort((a,b) => new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime())
+        
       }
       
     }
@@ -62,15 +60,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-container{
-  display: flex;
-  margin: auto;
-  max-width:1100px;
-  main{
-    width: 100%;
-    max-width: 736px ;
-  }
-}
+
 .board-card-container{
   width:100%;
   display: grid;
