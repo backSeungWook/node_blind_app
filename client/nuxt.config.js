@@ -1,9 +1,9 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'client',
+    title: '블라인드 클론',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ko'
     },
     meta: [
       { charset: 'utf-8' },
@@ -22,9 +22,14 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  //전역에서 사용할수 있는
   plugins: [
     "@plugins/api.js",
-    "@plugins/time.js"
+    "@plugins/time.js",
+    {
+      src:"@plugins/infinite.js",
+      ssr:false //서버사이드랜더링에서는 사용 안함.
+    }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

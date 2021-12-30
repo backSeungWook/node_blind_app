@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
 
-const { Article , Comment } = require('../mongoose/model')
+const { Article , Comment, Reply } = require('../mongoose/model')
 
 // 개별 게시글 가져오는 라우트
 router.get('/article/:key',async (req,res) =>{
@@ -13,15 +13,69 @@ router.get('/article/:key',async (req,res) =>{
       populate:{path:'company'}
     })
     .populate('board')
-  const comment = await Comment.find({article:article._id})
-  res.send({article:{
-    ...article._doc,
-    author:{
-      ...article.author._doc,
-      nickname: `${article.author._doc.nickname[0]}${"*".repeat(article.author._doc.nickname.length -1)}`
-    }
-  },comment})
+
+  const commentList = await Comment.find({article:article._id}).populate({
+    path:'author',
+    populate:{path:'company'}
+  })
+
+  Promise.all(
+    // 대댓글 매칭
+    commentList.map(async (v) =>{
+      const replies = await Reply.find({ comment: v._doc._id }).populate({
+        path:'author',
+        populate:{path:'company'}
+      })
+      
+      
+      return {
+        //댓글 배열
+        ...v._doc,
+        author:{
+          ...v.author._doc,
+          nickname: `${v._doc.author._doc.nickname[0]}${"*".repeat(v._doc.author._doc.nickname.length -1)}`
+        },
+        //대댓글 배열
+        replies:replies.map((r) =>{
+          return{
+            ...r._doc,
+            author:{
+              ...r.author._doc,
+              nickname: `${r._doc.author._doc.nickname[0]}${"*".repeat(r._doc.author._doc.nickname.length -1)}`
+            }
+          }
+        }), 
+      }
+    })
+  ).then((comment) =>{
+    res.send({
+      article:{
+        ...article._doc,
+        author:{
+          ...article.author._doc,
+          nickname: `${article.author._doc.nickname[0]}${"*".repeat(article.author._doc.nickname.length -1)}`
+        }
+      },
+      comment
+    })
+  }).catch((error)=>{
+    console.log('/article/:key error',error)
+  })
+
 })
+
+//좋아요
+router.post('/article/thumbup', async (req,res) =>{
+  const { articleId } = req.body
+
+  await Article.findOneAndUpdate(
+    {_id:articleId},
+    {
+      $inc: {thumbupCount: 1} //$inc => commentCount=commentCount+1
+    }
+  )
+})
+
 
 // 게시글 추가
 router.post('/article/create', async (req,res) =>{
@@ -42,8 +96,7 @@ router.post('/article/create', async (req,res) =>{
     if(err){
       res.send(err)
     }
-    
-    console.log(data)
+        
     const payload = {author:data.id,title,content,board}
     const newArticle = await Article(payload).save()
     res.send(newArticle)

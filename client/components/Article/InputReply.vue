@@ -1,13 +1,11 @@
 <template>
   <div id="input-comment" >
-
     <CameraIcon class="icon"/>
-    
-    <div v-if="!enlarge" @click="openText"  class="empty" >댓글을 남겨주세요.</div>
-    <div v-else class="content-container">
-      <textarea v-model="content" ref="commentText" placeholder="댓글을 남겨주세요." ></textarea>
+
+    <div  class="content-container">
+      <textarea v-model="content" ref="commentText" placeholder="대댓글을 남겨주세요." ></textarea>
       <div class="foot">
-        <a @click.prevent="calne">취소</a>
+        <a @click.prevent="$emit('close')">취소</a>
         <a @click.prevent="uploadComment" :class="[content !== null && content !== '' && 'active' ]">등록</a>
       </div>
     </div>
@@ -20,46 +18,41 @@ import { CameraIcon } from 'vue-feather-icons'
 
 export default {
   props:{
-    articleId:{
+    commentId:{
       type:String,
-      required:true,
-      
+      required:true
     }
   },
   data(){
     return{
-      //true 입력할수있게 창이 펼쳐진 상태
-      //false 창이 닫아진 상태
-      enlarge:false,
       content:null,
-      article:null,
+      articleId:null,
     }
+  },
+  created(){
+    this.setFocus()
   },
   methods:{
     async uploadComment(){
       if(process.browser){
-        const data = await this.$api.$post('/comment/create',{
+        const data = await this.$api.$post('/reply/create',{
+          comment:this.commentId,
           content:this.content,
-          article:this.articleId
         })
 
         if(!data){
           return
         }
-        this.enlarge = false
+        
         this.content = null
+        this.$emit('close')
       }
     },
-    openText(){
-      this.enlarge = true
+    setFocus(){
       this.$nextTick(() =>{
         this.$refs.commentText.focus()
       })
     },
-    calne(){
-      this.enlarge = false
-    }
-    
   },
   components:{
     CameraIcon

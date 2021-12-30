@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #eee;
   }
   h2{
     font-size: 18px;
@@ -23,11 +24,14 @@
     list-style: none;
     display: flex;
     padding-top: 9px;
-    span{
+    a{
       display: inline-block;
       line-height: 20px;
       color: #222;
+      opacity: 1;
+      font-size: 16px;
     }
+    
     .icon{
       margin-right: 5px;
     }

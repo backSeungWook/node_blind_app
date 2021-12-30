@@ -22,3 +22,6 @@ npm i --save mongoose-sequence
     Bracket Pair Colorizer 2
     Material Icon Theme
     Auto Close Tag
+    Vue 2 Snippets : vetur에서 지원하지 않은 자동완성까지 적용시켜준다.
+
+# AWS 배포

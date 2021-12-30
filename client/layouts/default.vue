@@ -2,11 +2,14 @@
   <div>
     <GNB />
     <Nuxt />
+    <!-- <foot/> -->
   </div>
 </template>
 
 <script>
+
 export default {
+  
   created(){
     this.initLogin()
     

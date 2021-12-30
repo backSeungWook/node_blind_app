@@ -1,17 +1,41 @@
 //대댓글
 const express = require('express')
 const router = express.Router()
-
-const { Reply } = require('../mongoose/model')
+const jwt = require('jsonwebtoken')
+const { Comment, Reply } = require('../mongoose/model')
 
 
 // 대댓글 생성
 router.post('/reply/create',async (req,res) =>{
-const { author, comment, content} = req.body
-  const newReply = await Reply({author,comment,content}).save()
+  const {  comment, content} = req.body
+  const { authorization } = req.headers
 
-  res.send(newReply._id ? true:flase)
-    
+  if(!authorization){
+    return res.send({
+      error:true,
+      msg:'토큰이 존재 하지 않음.',
+    })    
+  }
+
+  const token = authorization.split(" ")[1]
+  const secret = req.app.get('jwt-secret')
+  
+  jwt.verify(token,secret,async (err,data) =>{
+    if(err){
+      res.send(err)
+    }
+        
+    const newReply = await Reply({author:data.id,comment,content}).save()
+
+    const updateCount =  await Comment.findOneAndUpdate(
+      {_id:comment},
+      {
+        $inc: {replyCount: 1} //$inc => commentCount=commentCount+1
+      }
+    )
+
+    res.send(newReply._id ? true:flase)
+  })  
 })
 
 // 대댓글 수정

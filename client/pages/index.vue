@@ -50,10 +50,8 @@ export default {
           return
         }
   
-        this.mainContent = data.content.sort((a,b) => new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime())
-        
+        this.mainContent = data.content.sort((a,b) => new Date(a.createdAt).getTime() > new Date(b.createdAt).getTime()) 
       }
-      
     }
   }
 }

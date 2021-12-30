@@ -18,6 +18,9 @@ router.get('/main',async (req,res) =>{
   let mainContent = []
   Promise.all(board.map(async b => {
     const recentArticles = await Article.find({board:b._id})
+    .sort({_id:-1})
+    .limit(4)
+
     if(!Array.isArray(recentArticles)){
       return false
     }
@@ -47,7 +50,7 @@ router.get('/main',async (req,res) =>{
 // 게시판 목록을 불러오는 라우트
 router.get('/board/list', async (req,res) =>{
   const board = await Board.find()
-  console.log('board/list ',board)
+  
   res.send(board)
 })
 
@@ -64,10 +67,23 @@ router.get('/board/:slug',async (req,res) =>{
       msg:'존재하지 않는 게시판'
     })
   }
-  const article = await Article.find( {board:board._id}).populate({
-    path:'author',
-    populate:{path:'company'}
-  })  //.populate("author") => 외래키 참조(즉 조인) 
+
+  const findOption ={
+    board:board._id,
+  }
+
+  if(lastIndex !== "0"){
+    findOption._id = { $lt:lastIndex } //$lt : mysql limit 10, 50
+  }
+
+  const article = await Article.find( findOption )
+    .sort({_id: -1})
+    .limit(10)
+    .populate({
+      path:'author',
+      populate:{path:'company'}
+    })  //.populate("author") => 외래키 참조(즉 조인) 
+    
 
   // map 함수 시 ._doc
   const fromatedArtilce = article.map( v =>{

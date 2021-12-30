@@ -20,7 +20,17 @@
     <div class="body">
       <ul class="article-list">
         <li v-for="a in articleList" :key="a.id">
-          <span class="article-title">{{a.title}}</span> 
+          <nuxt-link
+            :to="{
+              name:'post-key',
+              params:{
+                key:a.key
+              }
+            }"  
+            class="article-title"
+          >
+            {{a.title}}
+          </nuxt-link> 
           <div class="count-display">
             <div class="count-item">
               <EyeIcon size="1x" class="icon"/>
@@ -29,11 +39,7 @@
           </div>
         </li>
       </ul>
-
-      
     </div>
-
-    
   </div>
 </template>
 
